@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service class="Bytesystems\NumberGeneratorBundle\Entity\NumberSequence" id="bytesystems.number_generator_bundle.entity.number_sequence " public="true"/>
+
+        <service class="Bytesystems\NumberGeneratorBundle\Annotation\AnnotationReader" id="bytesystems.number_generator_bundle.annotation.annotation_reader" public="false" />
+        <service class="Bytesystems\NumberGeneratorBundle\Repository\NumberSequenceRepository" id="bytesystems.number_generator_bundle.repository.number_sequence_repository" public="false">
+            <argument id="doctrine" type="service"/>
+            <argument type="string" >Bytesystems\NumberGeneratorBundle\Entity\NumberSequence</argument>
+        </service>
+
+        <service class="Bytesystems\NumberGeneratorBundle\Service\NumberGenerator" id="bytesystems.number_generator_bundle.service.number_generator" public="false">
+            <argument id="bytesystems.number_generator_bundle.repository.number_sequence_repository" type="service" />
+            <argument id="doctrine.orm.entity_manager" type="service" />
+            <argument id="bytesystems.number_generator_bundle.service.property_helper" type="service"/>
+        </service>
+
+        <service class="Bytesystems\NumberGeneratorBundle\Service\PropertyHelper" id="bytesystems.number_generator_bundle.service.property_helper" public="false">
+            <argument id="property_accessor" type="service"/>
+        </service>
+
+        <service class="Bytesystems\NumberGeneratorBundle\EventListener\NumberGeneratorSubscriber" id="bytesystems.number_generator_bundle.event_listener.number_generator_subscriber" public="false">
+            <argument id="bytesystems.number_generator_bundle.annotation.annotation_reader" type="service"/>
+            <argument id="bytesystems.number_generator_bundle.service.number_generator" type="service"/>
+            <argument id="bytesystems.number_generator_bundle.service.property_helper" type="service"/>
+            <tag name="doctrine.event_subscriber"/>
+        </service>
+
+
+
+    </services>
+</container>

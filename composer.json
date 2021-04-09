@@ -1,0 +1,34 @@
+{
+    "name": "bytesystems/number-sequence-generator",
+    "description": "A generator for human readable number sequences",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Heim",
+            "email": "heim@bytesystems.de"
+        }
+    ],
+    "require": {
+        "php": "^7.3",
+        "symfony/config": "^4.4|^5.0",
+        "symfony/dependency-injection": "^4.4|^5.0",
+        "symfony/http-kernel": "^4.4|^5.0",
+        "doctrine/orm": "^2.0",
+        "doctrine/doctrine-bundle": "^2.0",
+        "symfony/property-access": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bytesystems\\NumberGeneratorBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bytesystems\\NumberGeneratorBundle\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "^5.2"
+    }
+}
