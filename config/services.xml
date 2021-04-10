@@ -11,6 +11,7 @@
         <service class="Bytesystems\NumberGeneratorBundle\Repository\NumberSequenceRepository" id="bytesystems.number_generator_bundle.repository.number_sequence_repository" public="false">
             <argument id="doctrine" type="service"/>
             <argument type="string" >Bytesystems\NumberGeneratorBundle\Entity\NumberSequence</argument>
+            <tag name="doctrine.repository_service"/>
         </service>
 
         <service class="Bytesystems\NumberGeneratorBundle\Service\NumberGenerator" id="bytesystems.number_generator_bundle.service.number_generator" public="false">
@@ -23,14 +24,17 @@
             <argument id="property_accessor" type="service"/>
         </service>
 
+        <service class="Bytesystems\NumberGeneratorBundle\Service\SegmentResolver" id="bytesystems_number_generator.service.segment_resolver">
+            <argument id="bytesystems.number_generator_bundle.service.property_helper" type="service"/>
+        </service>
+
         <service class="Bytesystems\NumberGeneratorBundle\EventListener\NumberGeneratorSubscriber" id="bytesystems.number_generator_bundle.event_listener.number_generator_subscriber" public="false">
             <argument id="bytesystems.number_generator_bundle.annotation.annotation_reader" type="service"/>
             <argument id="bytesystems.number_generator_bundle.service.number_generator" type="service"/>
             <argument id="bytesystems.number_generator_bundle.service.property_helper" type="service"/>
+            <argument id="bytesystems_number_generator.service.segment_resolver" type="service"/>
             <tag name="doctrine.event_subscriber"/>
         </service>
-
-
 
     </services>
 </container>

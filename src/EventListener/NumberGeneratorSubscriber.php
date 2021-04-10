@@ -8,6 +8,7 @@ use Bytesystems\NumberGeneratorBundle\Annotation\AnnotationReader;
 use Bytesystems\NumberGeneratorBundle\Annotation\Sequence;
 use Bytesystems\NumberGeneratorBundle\Service\NumberGenerator;
 use Bytesystems\NumberGeneratorBundle\Service\PropertyHelper;
+use Bytesystems\NumberGeneratorBundle\Service\SegmentResolver;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -23,12 +24,17 @@ class NumberGeneratorSubscriber implements EventSubscriber
      * @var PropertyHelper
      */
     protected $propertyHelper;
+    /**
+     * @var SegmentResolver
+     */
+    protected $resolver;
 
-    public function __construct(AnnotationReader $annotationReader, NumberGenerator $generator,PropertyHelper $propertyHelper)
+    public function __construct(AnnotationReader $annotationReader, NumberGenerator $generator, PropertyHelper $propertyHelper,SegmentResolver $resolver)
     {
         $this->annotationReader = $annotationReader;
         $this->generator = $generator;
         $this->propertyHelper = $propertyHelper;
+        $this->resolver = $resolver;
     }
 
     public function getSubscribedEvents()
@@ -47,26 +53,12 @@ class NumberGeneratorSubscriber implements EventSubscriber
 
         if(count($annotations) == 0) return;
 
+        dump($annotations);
+
         foreach ($annotations as $property => $annotation) {
-            $segment = $this->resolveSegment($object,$annotation);
+            $segment = $this->resolver->resolveSegment($object,$annotation);
             $nextNumber = $this->generator->getNextNumber($annotation->key, $segment, $annotation->pattern, $annotation->init);
             $this->propertyHelper->setValue($object,$property,$nextNumber);
         }
-    }
-
-    protected function resolveSegment($object, $annotation)
-    {
-        $segment = $annotation->segment;
-
-        $matches = [];
-        if (preg_match_all('/{(.*?)}/', $segment, $matches)) {
-            foreach ((array) $matches[1] as $key => $property) {
-                $segmentPart = $this->propertyHelper->getValue($object, $property);
-                $segment = str_replace($matches[0][$key], $segmentPart, $segment);
-            }
-        }
-
-        return $segment;
-
     }
 }

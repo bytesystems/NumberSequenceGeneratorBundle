@@ -10,14 +10,14 @@ class AnnotatedMock
     private $foo = "thud";
 
     /**
-     * @NG\Sequence(key="for",segment="foo")
+     * @NG\Sequence(key="bar",segment="foo")
      *
      * @var string
      */
     private $bar = "waldo";
 
     /**
-     * @NG\Sequence(key="for",segment="foo")
+     * @NG\Sequence(key="baz",segment="{foo}")
      *
      * @var string
      */

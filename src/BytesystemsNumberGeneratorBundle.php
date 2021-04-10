@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Bytesystems\NumberGenerator\Bundle;
+namespace Bytesystems\NumberGeneratorBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

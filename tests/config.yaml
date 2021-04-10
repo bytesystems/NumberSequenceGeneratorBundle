@@ -1,0 +1,37 @@
+framework:
+  secret: secret
+  test: ~
+  session:
+    storage_id: session.storage.mock_file
+  profiler:
+    collect: false
+doctrine:
+  dbal:
+    driver: pdo_sqlite
+    path: "%kernel.cache_dir%/test.db"
+    url: null
+  orm:
+    entity_managers:
+      default:
+        mappings:
+          NumberGeneratorBundle:
+            type: annotation
+            dir: src/Entity
+            prefix: Bytesystems\NumberGeneratorBundle
+          NumberGeneratorBundleTest:
+            type: annotation
+            dir: tests/Entity
+            prefix: Bytesystems\NumberGeneratorBundle\Tests
+liip_test_fixtures:
+  cache_db:
+    sqlite: liip_test_fixtures.services_database_backup.sqlite
+services:
+  _defaults:
+    autowire: true
+    public: true
+    bind:
+      $entityClass: 'NumberSequence'
+  Bytesystems\NumberGeneratorBundle\:
+    resource: '../src'
+
+

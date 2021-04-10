@@ -30,12 +30,12 @@ class NumberGenerator
         $this->entityManager = $entityManager;
     }
 
-    public function getNextNumber(string $key, string $segment = null, string $pattern = null, int $initialValue = 0 ): int
+    public function getNextNumber(string $key, ?string $segment = null, ?string $pattern = null, ?int $initialValue = 0 ): int
     {
 
         $sequence = $this->getSequence($key,$segment, $pattern);
 
-        $currentValue = max($sequence->getCurrent(), $annotation->init ?? 0);
+        $currentValue = max($sequence->getCurrent(), $initialValue ?? 0);
 
         $sequence->setCurrent($currentValue+1);
         $this->entityManager->flush();

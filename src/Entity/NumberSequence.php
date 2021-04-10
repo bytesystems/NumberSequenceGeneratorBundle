@@ -103,7 +103,7 @@ class NumberSequence
     /**
      * @return string
      */
-    public function getkey(): string
+    public function getKey(): string
     {
         return $this->key;
     }
