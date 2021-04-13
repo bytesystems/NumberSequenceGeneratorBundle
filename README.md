@@ -3,7 +3,7 @@
 For now it depends on doctrine ORM to store the sequences.
 
 ## Installation
-`$ composer require bytesystems/number-generator`\
+`$ composer require bytesystems/number-sequence-generator`\
 `$ symfony console make:migration`\
 `$ symfony console doctrine:migrations:migrate`
 
