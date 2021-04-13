@@ -62,7 +62,12 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
         $barSequence = $this->repository->findOneBy(['key' => 'bar']);
         $this->assertInstanceOf(NumberSequence::class,$barSequence);
-        $this->assertEquals(1001,$barSequence->getCurrent());
+
+        //(key="bar",init=1000,pattern="BAR{#|6}") should resolve to BAR001001
+
+        $this->assertEquals('BAR001001',$object->getBar());
+        $this->assertEquals(1001,$barSequence->getCurrentNumber());
+        $this->assertEquals(1002,$barSequence->getNextNumber());
     }
 
     public function testBarSequenceForMultipleEntities()
@@ -77,7 +82,8 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
         $barSequence = $this->repository->findOneBy(['key' => 'bar']);
         $this->assertInstanceOf(NumberSequence::class,$barSequence);
-        $this->assertEquals(1011,$barSequence->getCurrent());
+        $this->assertEquals(1011,$barSequence->getCurrentNumber());
+        $this->assertEquals(1012,$barSequence->getNextNumber());
     }
 
     public function testBazSequence()
@@ -92,7 +98,9 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
         $barSequence = $this->repository->findOneBy(['key' => 'baz']);
         $this->assertInstanceOf(NumberSequence::class,$barSequence);
-        $this->assertEquals(1,$barSequence->getCurrent());
+        $this->assertEquals(1,$barSequence->getCurrentNumber());
+        $this->assertEquals(1,$object->getBaz());
+        $this->assertEquals(2,$barSequence->getNextNumber());
     }
 
     public function testBazSequenceWithSegment()
@@ -103,7 +111,7 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
         $bazSequence = new NumberSequence();
         $bazSequence->setKey('baz');
         $bazSequence->setSegment('id');
-        $bazSequence->setCurrent(241);
+        $bazSequence->setCurrentNumber(241);
         $bazSequence->setUpdatedAt(new DateTime());
 
         $em->persist($bazSequence);
@@ -116,13 +124,16 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
         $sequence = $this->repository->findOneBy(['key' => 'baz','segment' => 'id']);
         $this->assertInstanceOf(NumberSequence::class,$sequence);
         $this->assertEquals('id',$sequence->getSegment());
-        $this->assertEquals(242,$sequence->getCurrent());
+        $this->assertEquals(242,$object->getBaz());
+        $this->assertEquals(242,$sequence->getCurrentNumber());
+        $this->assertEquals(243,$sequence->getNextNumber());
 
         // Make sure the bar sequence was generated.
 
         $sequence = $this->repository->findOneBy(['key' => 'bar']);
         $this->assertInstanceOf(NumberSequence::class,$sequence);
-        $this->assertEquals(1001,$sequence->getCurrent());
+        $this->assertEquals(1001,$sequence->getCurrentNumber());
+        $this->assertEquals(1002,$sequence->getNextNumber());
     }
 
     public function testPersistResolvedSegmentNotConfigured()
@@ -133,7 +144,7 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
         $bazSequence = new NumberSequence();
         $bazSequence->setKey('foo');
         $bazSequence->setSegment('thudValue');
-        $bazSequence->setCurrent(149);
+        $bazSequence->setCurrentNumber(149);
         $bazSequence->setUpdatedAt(new DateTime());
 
         $em->persist($bazSequence);
@@ -146,7 +157,9 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
         $sequence = $this->repository->findOneBy(['key' => 'foo']);
         $this->assertInstanceOf(NumberSequence::class,$sequence);
-        $this->assertEquals(150,$sequence->getCurrent());
+        $this->assertEquals(150,$object->getFoo());
+        $this->assertEquals(150,$sequence->getCurrentNumber());
+        $this->assertEquals(151,$sequence->getNextNumber());
         $this->assertEquals('thudValue',$sequence->getSegment());
     }
 
@@ -167,10 +180,8 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
         $sequence = $this->repository->findOneBy(['key' => 'foo']);
         $this->assertInstanceOf(NumberSequence::class,$sequence);
-        $this->assertEquals(1,$sequence->getCurrent());
+        $this->assertEquals(1,$sequence->getCurrentNumber());
+        $this->assertEquals(2,$sequence->getNextNumber());
         $this->assertEquals(null,$sequence->getSegment());
-
-
-
     }
 }

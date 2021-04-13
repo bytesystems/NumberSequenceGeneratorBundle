@@ -32,6 +32,9 @@ services:
     bind:
       $entityClass: 'NumberSequence'
   Bytesystems\NumberGeneratorBundle\:
-    resource: '../src'
+    resource: '../src/*'
+    exclude: '../src/{DependencyInjection,Entity,Token}'
+
+
 
 

@@ -61,4 +61,9 @@ class NumberSequenceRepository extends ServiceEntityRepository
         return $qb ->getQuery()
                    ->getResult();
     }
+
+    public function flush()
+    {
+        $this->getEntityManager()->flush();
+    }
 }

@@ -53,8 +53,6 @@ class NumberGeneratorSubscriber implements EventSubscriber
 
         if(count($annotations) == 0) return;
 
-        dump($annotations);
-
         foreach ($annotations as $property => $annotation) {
             $segment = $this->resolver->resolveSegment($object,$annotation);
             $nextNumber = $this->generator->getNextNumber($annotation->key, $segment, $annotation->pattern, $annotation->init);

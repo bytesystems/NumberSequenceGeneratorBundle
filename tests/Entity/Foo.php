@@ -28,7 +28,7 @@ class Foo
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @NG\Sequence(key="bar",init=1000)
+     * @NG\Sequence(key="bar",init=1000,pattern="BAR{#|6}")
      * @var string
      */
     private $bar;

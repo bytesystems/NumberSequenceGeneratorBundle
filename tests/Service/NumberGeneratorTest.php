@@ -15,9 +15,6 @@ class NumberGeneratorTest extends KernelTestCase
 
     use FixturesTrait;
 
-    private $repository;
-    private $em;
-
     protected function setUp():void
     {
         parent::setUp();
@@ -25,37 +22,28 @@ class NumberGeneratorTest extends KernelTestCase
         $application = new Application(self::$kernel);
         $application->setAutoExit(false);
 
-        $this->repository = new NumberSequenceRepository(
-            self::$kernel->getContainer()->get('doctrine'),
-            NumberSequence::class
-        );
-
-        $this->em = self::$kernel->getContainer()->get('doctrine')->getManager();
-
     }
-
-//    public function testGetNextNumberForExistingSequence()
-//    {
-//
-//    }
 
     public function testGetNextNumberForNotExistingSequence()
     {
         $this->loadFixtures();
 
-        $numberGenerator = new NumberGenerator($this->repository,$this->em);
+        $numberGenerator = $this->getContainer()->get('bytesystems_number_generator.service.number_generator');
 
         $generatedNumber = $numberGenerator->getNextNumber('Key', null, null, 1000);
         $this->assertEquals(1001,$generatedNumber);
     }
 
-//    public function testGetNextNumberForExistingSequenceWithSegment()
-//    {
-//
-//    }
-//
-//    public function testGetNextNumberForNotExistingSequenceWithSegment()
-//    {
-//
-//    }
+    public function testTokenize()
+    {
+        $this->loadFixtures();
+        $numberGenerator = $this->getContainer()->get('bytesystems_number_generator.service.number_generator');
+        $generatedNumber = $numberGenerator->getNextNumber('Key', null, "IV-{Y}{m}-{#|4}-ID", 1000);
+        $expected = sprintf("IV-%s-1001-ID",date('Ym'));
+        $this->assertEquals($expected,$generatedNumber);
+        $generatedNumber = $numberGenerator->getNextNumber('Key2', null, "IV{y}-{#|6|y}", 1000);
+        $expected = sprintf("IV%s-001001",date('y'));
+        $this->assertEquals($expected,$generatedNumber);
+
+    }
 }

@@ -25,7 +25,7 @@ use Bytesystems\NumberGeneratorBundle\Repository\NumberSequenceRepository;
  */
 class NumberSequence
 {
-    const DEFAULT_CURRENT = 0;
+    const DEFAULT_INIT = 0;
 
     /**
      * @var integer|null
@@ -53,29 +53,39 @@ class NumberSequence
      * @var string|null
      * @ORM\Column(type="string",length=60,nullable=true)
      */
-    protected $pattern ='';
+    protected $pattern ='{#}';
 
     /**
      * @var int
      * @ORM\Column(type="integer")
      */
-    protected $current = self::DEFAULT_CURRENT;
+    protected $currentNumber = self::DEFAULT_INIT;
 
     /**
      * @return int
      */
-    public function getCurrent(): int
+    public function getNextNumber(?int $initialValue = 0): int
     {
-        return $this->current;
+        $currentValue = max($this->currentNumber, $initialValue ?? 0);
+        $this->currentNumber = $currentValue +1;
+        return $this->currentNumber;
     }
 
     /**
-     * @param int $current
+     * @return int
+     */
+    public function getCurrentNumber(): int
+    {
+        return $this->currentNumber;
+    }
+
+    /**
+     * @param int $currentNumber
      * @return NumberSequence
      */
-    public function setCurrent(int $current): NumberSequence
+    public function setCurrentNumber(int $currentNumber): NumberSequence
     {
-        $this->current = $current;
+        $this->currentNumber = $currentNumber;
         return $this;
     }
 
