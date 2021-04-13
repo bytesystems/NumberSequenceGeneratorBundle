@@ -14,9 +14,9 @@ To configure your sequences, use **Annotations**
 To create a number sequence for an entity, annotate the property, that should be set to the generated number.
 
 ### Annotation
-Add the following use statement to your entity
+Add the following use statement to your entity\
 `use Bytesystems\NumberGeneratorBundle\Annotation as NG;`  
-and annotate the property with:  
+and annotate the property with:\
 `@NG\Sequence(key="key",segment="segment",init=1000,pattern="IV{Y}-{#|6|y})`
 
 The resulting number will follow the pattern, in this case a generated number might look like:
