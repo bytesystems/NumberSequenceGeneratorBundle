@@ -36,8 +36,8 @@ The *{#}* token is mandatory and will be assumed, if pattern is omitted.
 The following tokens are available, date components follow PHP's datetime.format.
 
 - *{#|L|C}* The current number of the sequence.
-  If L is provided, the number will be left-padded with zeroes to length L.
-  If C, the date context, is provided, the number will reset on change of context.
+  If L is provided, the number will be left-padded with zeroes to length L.\
+  If C - the date context - is provided, the number will reset on change of context.\
   Allowed values for context are (y = year, m = month, d = day, w = week and hour).
 - *{D}* Datetime part following datetime.format, allowed values for D are almost all values that produce a fixed length, f.e. d (day of month, 2 digits with leading zero) is allowed, while j (day of month, without leading zeroes) is not.
   Allowed values:
