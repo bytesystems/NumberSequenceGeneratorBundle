@@ -1,11 +1,14 @@
 # BytesystemsNumberGeneratorBundle
 *This bundle provides an annotation driven approach to generate number sequences for various use-cases, for example for invoices, offers, orders etc.*
-For now it depends on doctrine ORM to store the sequences.
+For now it depends on doctrine\orm to store the sequences and doctrine\migrations to prepare your database. 
 
 ## Installation
 `$ composer require bytesystems/number-sequence-generator`\
-`$ symfony console make:migration`\
+Prepare your database:\
+`$ symfony console doctrine:migrations:diff`\
 `$ symfony console doctrine:migrations:migrate`
+
+If you don't want to add 
 
 No further configuration for the bundle is needed.\
 To configure your sequences, use **Annotations**
@@ -54,8 +57,7 @@ The following tokens are available, date components follow PHP's datetime.format
 *optional, defaults to 0*\
 Defines the inital number for the sequence, the first generated number is initial number + 1.
 
-
-### About Segmentation
+## About Segmentation
 It is up to you, to define segmented sequences by yourself and persist them.
 This gives you flexibility to define dynamic sequences, that rely on another property from your entity.\
 It falls back to default sequence unless you explicitly define the sequence manually.
@@ -105,6 +107,9 @@ Assuming the supplierId of Olymp is 42,
 enable the Olymp sequence using the following SQL statement:\
 `insert into bytesystems_number_sequence (sequence, segment, pattern, current_number, updated_at) values ('product','42', 'ZEUS-{#|5}-P',0,now());` 
 
-### ToDo
+## ToDo
 - include console command to generate a sequence
 - include option to auto enable segmented sequences
+
+## License
+[The MIT License (MIT)](LICENSE)
