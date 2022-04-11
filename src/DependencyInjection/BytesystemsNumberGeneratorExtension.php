@@ -12,6 +12,12 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 class BytesystemsNumberGeneratorExtension extends Extension
 {
+    /**
+     * @param array $configs
+     * @param ContainerBuilder $container
+     * @throws \Exception
+     */
+
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = $this->getConfiguration($configs,$container);

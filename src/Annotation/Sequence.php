@@ -19,9 +19,14 @@ namespace Bytesystems\NumberGeneratorBundle\Annotation;
  */
 class Sequence
 {
-    /** @Required */
+    /** @Required
+     * @var string
+     */
     public $key;
+    /** @var string */
     public $segment;
+    /** @var string */
     public $pattern;
+    /** @var int */
     public $init;
 }

@@ -9,7 +9,10 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class BytesystemsNumberGeneratorBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
+    /**
+     * @param ContainerBuilder $container
+     */
+    public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new RegisterTokenHandlersPass());
         parent::build($container);
