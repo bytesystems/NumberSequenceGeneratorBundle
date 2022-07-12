@@ -37,6 +37,9 @@ class NumberGeneratorSubscriber implements EventSubscriber
         $this->resolver = $resolver;
     }
 
+    /**
+     * @return array
+     */
     public function getSubscribedEvents()
     {
         return [
