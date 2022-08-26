@@ -3,6 +3,8 @@
 
 namespace Bytesystems\NumberGeneratorBundle\Annotation;
 
+use Attribute;
+
 /**
  * Annotation to flag an entity field to be automatically filled
  * with a sequence number
@@ -17,6 +19,7 @@ namespace Bytesystems\NumberGeneratorBundle\Annotation;
  *    @Attribute("init", required=false, type="int")
  * })
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 class Sequence
 {
     /** @Required
@@ -25,6 +28,10 @@ class Sequence
     public $key;
     /** @var string */
     public $segment;
+
+    /** @var array */
+    public $segments;
+
     /** @var string */
     public $pattern;
     /** @var int */
