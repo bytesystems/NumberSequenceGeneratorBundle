@@ -15,7 +15,7 @@ class SegmentResolver
 
     public function resolveSegment($object, $annotation)
     {
-        $segment = $annotation->segment;
+        $segment = $annotation->segment == null ? '' : $annotation->segment;
 
         $matches = [];
         if (preg_match_all('/{(.*?)}/', $segment, $matches)) {

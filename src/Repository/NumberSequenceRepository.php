@@ -43,20 +43,6 @@ class NumberSequenceRepository extends ServiceEntityRepository
             )
             ->setParameter('segment',$segment);
 
-//        if($segment)
-//        {
-//            $qb ->andWhere(
-//                $qb->expr()->orX(
-//                    $qb->expr()->eq('s.segment',':segment'),
-//                    $qb->expr()->isNull('s.segment')
-//                    )
-//                )
-//                ->setParameter('segment',$segment);
-//        }
-//        else
-//        {
-//            $qb ->andWhere($qb->expr()->isNull('s.segment'));
-//        }
 
         return $qb ->getQuery()
                    ->getResult();

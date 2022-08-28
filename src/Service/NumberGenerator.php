@@ -43,6 +43,7 @@ class NumberGenerator
         $sequence = $this->getSequence($key,$segment, $pattern);
 
         $pattern = $sequence->getPattern();
+        dump($pattern);
         $tokens = $this->tokenize($pattern,$sequence->getUpdatedAt());
 
         if($this->checkForReset($tokens))
@@ -70,24 +71,36 @@ class NumberGenerator
 
         $sequences = $this->repository->getSequence($key, $segment);
 
-        $sequence = array_filter($sequences, function($sequence) {
-            return $sequence->getSegment() === null;
-        })[0] ?? null;
+        $defaultSequence = array_filter($sequences, function($sequence) {
+                return $sequence->getSegment() === null;
+            })[0] ?? null;
 
-        if($segment)
-        {
-            $sequence = array_filter($sequences, function($sequence) use ($segment) {
+        $segmentSequence = array_filter($sequences, function($sequence) use ($segment) {
                 return $sequence->getSegment() === $segment;
-            })[0] ?? $sequence;
-        }
+            })[0] ?? null;
 
-        if (null === $sequence) {
+        if(null === $segment && null === $defaultSequence) {
             $sequence = new NumberSequence();
             $sequence->setKey($key);
             $sequence->setPattern($pattern == null ? '{#}' : $pattern);
             $this->repository->add($sequence,false);
+            $defaultSequence = $sequence;
         }
-        return $sequence;
+
+        if($segment) {
+            if(null === $segmentSequence && $pattern)
+            {
+                $sequence = new NumberSequence();
+                $sequence->setKey($key);
+                $sequence->setSegment($segment);
+                $sequence->setPattern($pattern == null ? '{#}' : $pattern);
+                $this->repository->add($sequence,false);
+                return $sequence;
+            }
+
+            if($segmentSequence) return $segmentSequence;
+        }
+        return $defaultSequence;
     }
 
     private function tokenize(string $pattern, DateTime $lastUpdate): array

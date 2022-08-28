@@ -4,15 +4,18 @@ namespace Bytesystems\NumberGeneratorBundle\Tests\EventListener;
 
 use Bytesystems\NumberGeneratorBundle\Entity\NumberSequence;
 use Bytesystems\NumberGeneratorBundle\Repository\NumberSequenceRepository;
+use Bytesystems\NumberGeneratorBundle\Tests\Entity\Bar;
 use Bytesystems\NumberGeneratorBundle\Tests\Entity\Foo;
 use DateTime;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class NumberGeneratorSubscriberTest extends KernelTestCase
 {
-    use FixturesTrait;
+    /** @var AbstractDatabaseTool */
+    protected $databaseTool;
 
     private $repository;
 
@@ -22,6 +25,8 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
         $this->bootKernel();
         $application = new Application(self::$kernel);
         $application->setAutoExit(false);
+
+        $this->databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
 
         $this->repository = new NumberSequenceRepository(
             self::$kernel->getContainer()->get('doctrine'),
@@ -33,7 +38,7 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
     public function testPrePersist()
     {
-        $this->loadFixtures();
+        $this->databaseTool->loadFixtures();
 
         $object = new Foo();
         $em = self::$kernel->getContainer()->get('doctrine')->getManager();
@@ -45,14 +50,14 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
         $results = $this->repository->findAll();
 
-        $this->assertCount(3,$results);
+        $this->assertCount(4,$results);
 
 
     }
 
     public function testBarSequence()
     {
-        $this->loadFixtures();
+        $this->databaseTool->loadFixtures();
 
         $object = new Foo();
 
@@ -88,7 +93,7 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
     public function testBazSequence()
     {
-        $this->loadFixtures();
+        $this->databaseTool->loadFixtures();
 
         $object = new Foo();
 
@@ -105,7 +110,7 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
     public function testBazSequenceWithSegment()
     {
-        $this->loadFixtures();
+        $this->databaseTool->loadFixtures();
         $em = self::$kernel->getContainer()->get('doctrine')->getManager();
 
         $bazSequence = new NumberSequence();
@@ -116,6 +121,8 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
         $em->persist($bazSequence);
         $em->flush();
+
+
 
         $object = new Foo();
         $em->persist($object);
@@ -136,9 +143,25 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
         $this->assertEquals(1002,$sequence->getNextNumber());
     }
 
+    public function testQuxSequenceWithSegment()
+    {
+        $this->databaseTool->loadFixtures();
+        $em = self::$kernel->getContainer()->get('doctrine')->getManager();
+
+        $object = new Bar();
+        $em->persist($object);
+        $em->flush();
+
+        $object = new Bar();
+        $object->setQuux('foo');
+        $em->persist($object);
+        $em->flush();
+
+    }
+
     public function testPersistResolvedSegmentNotConfigured()
     {
-        $this->loadFixtures();
+        $this->databaseTool->loadFixtures();
         $em = self::$kernel->getContainer()->get('doctrine')->getManager();
 
         $bazSequence = new NumberSequence();
@@ -170,7 +193,7 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
     {
 
 
-        $this->loadFixtures();
+        $this->databaseTool->loadFixtures();
 
         $object = new Foo();
 

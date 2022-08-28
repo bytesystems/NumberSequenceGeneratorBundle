@@ -25,9 +25,9 @@ class AnnotationReaderTest extends TestCase
 
 
         $this->assertIsArray($result);
-        $this->assertCount(3,$result);
+        $this->assertCount(4,$result);
         $this->assertSame(
-            ['bar','baz','foo'],
+            ['bar','baz','foo','qux'],
             array_keys($result)
         );
 

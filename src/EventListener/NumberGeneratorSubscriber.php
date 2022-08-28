@@ -7,6 +7,7 @@ namespace Bytesystems\NumberGeneratorBundle\EventListener;
 use Bytesystems\NumberGeneratorBundle\Annotation\AnnotationReader;
 use Bytesystems\NumberGeneratorBundle\Annotation\Sequence;
 use Bytesystems\NumberGeneratorBundle\Service\NumberGenerator;
+use Bytesystems\NumberGeneratorBundle\Service\PatternResolver;
 use Bytesystems\NumberGeneratorBundle\Service\PropertyHelper;
 use Bytesystems\NumberGeneratorBundle\Service\SegmentResolver;
 use Doctrine\Common\EventSubscriber;
@@ -27,14 +28,19 @@ class NumberGeneratorSubscriber implements EventSubscriber
     /**
      * @var SegmentResolver
      */
-    protected $resolver;
+    protected $segmentResolver;
+    /**
+     * @var PatternResolver
+     */
+    private $patternResolver;
 
-    public function __construct(AnnotationReader $annotationReader, NumberGenerator $generator, PropertyHelper $propertyHelper,SegmentResolver $resolver)
+    public function __construct(AnnotationReader $annotationReader, NumberGenerator $generator, PropertyHelper $propertyHelper,SegmentResolver $segmentResolver, PatternResolver $patternResolver)
     {
         $this->annotationReader = $annotationReader;
         $this->generator = $generator;
         $this->propertyHelper = $propertyHelper;
-        $this->resolver = $resolver;
+        $this->segmentResolver = $segmentResolver;
+        $this->patternResolver = $patternResolver;
     }
 
     /**
@@ -57,8 +63,10 @@ class NumberGeneratorSubscriber implements EventSubscriber
         if(count($annotations) == 0) return;
 
         foreach ($annotations as $property => $annotation) {
-            $segment = $this->resolver->resolveSegment($object,$annotation);
-            $nextNumber = $this->generator->getNextNumber($annotation->key, $segment, $annotation->pattern, $annotation->init);
+            $segment = $this->segmentResolver->resolveSegment($object,$annotation);
+            $pattern = $this->patternResolver->resolvePattern($object,$annotation,$segment);
+
+            $nextNumber = $this->generator->getNextNumber($annotation->key, $segment, $pattern, $annotation->init);
             $this->propertyHelper->setValue($object,$property,$nextNumber);
         }
     }

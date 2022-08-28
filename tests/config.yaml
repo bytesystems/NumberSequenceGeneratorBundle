@@ -7,8 +7,10 @@ framework:
     collect: false
 doctrine:
   dbal:
+#    driver: pdo_sqlite
+#    url: 'sqlite:///%kernel.project_dir%/var/test.sqlite'
     driver: pdo_sqlite
-    url: 'sqlite:///%kernel.project_dir%/var/test.sqlite'
+    path: "%kernel.project_dir%/test.sqlite"
   orm:
     entity_managers:
       default:

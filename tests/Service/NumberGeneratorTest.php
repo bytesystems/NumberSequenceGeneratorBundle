@@ -2,18 +2,15 @@
 
 namespace Bytesystems\NumberGeneratorBundle\Tests\Service;
 
-use Bytesystems\NumberGeneratorBundle\Entity\NumberSequence;
-use Bytesystems\NumberGeneratorBundle\Repository\NumberSequenceRepository;
-use Bytesystems\NumberGeneratorBundle\Service\NumberGenerator;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
-use PHPUnit\Framework\TestCase;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class NumberGeneratorTest extends KernelTestCase
 {
-
-    use FixturesTrait;
+    /** @var AbstractDatabaseTool */
+    protected $databaseTool;
 
     protected function setUp():void
     {
@@ -22,11 +19,12 @@ class NumberGeneratorTest extends KernelTestCase
         $application = new Application(self::$kernel);
         $application->setAutoExit(false);
 
+        $this->databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
     }
 
     public function testGetNextNumberForNotExistingSequence()
     {
-        $this->loadFixtures();
+        $this->databaseTool->loadFixtures();
 
         $numberGenerator = $this->getContainer()->get('bytesystems_number_generator.service.number_generator');
 
@@ -36,7 +34,7 @@ class NumberGeneratorTest extends KernelTestCase
 
     public function testTokenize()
     {
-        $this->loadFixtures();
+        $this->databaseTool->loadFixtures();
         $numberGenerator = $this->getContainer()->get('bytesystems_number_generator.service.number_generator');
         $generatedNumber = $numberGenerator->getNextNumber('Key', null, "IV-{Y}{m}-{#|4}-ID", 1000);
         $expected = sprintf("IV-%s-1001-ID",date('Ym'));

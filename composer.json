@@ -33,7 +33,7 @@
         "doctrine/doctrine-bundle": "^2.3",
         "symfony/framework-bundle": "^4.4|^5.0",
         "symfony/yaml": "^5.2",
-        "liip/test-fixtures-bundle": "^1.11",
+        "liip/test-fixtures-bundle": "^2",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpstan/phpstan": "^0.12.83"
     },

@@ -15,6 +15,7 @@ use Attribute;
  * @Attributes({
  *    @Attribute("key", required=true, type="string"),
  *    @Attribute("segment", required=false, type="string"),
+ *    @Attribute("segments", required=false, type="array"),
  *    @Attribute("pattern", required=false, type="string"),
  *    @Attribute("init", required=false, type="int")
  * })
@@ -29,7 +30,7 @@ class Sequence
     /** @var string */
     public $segment;
 
-    /** @var array */
+    /** @var array  */
     public $segments;
 
     /** @var string */

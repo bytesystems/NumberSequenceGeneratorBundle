@@ -13,7 +13,7 @@ use Bytesystems\NumberGeneratorBundle\Annotation as NG;
  * @ORM\Table()
  * @ORM\Entity()
  */
-class Foo
+class Bar
 {
     private $thud = "thudValue";
 
@@ -28,7 +28,6 @@ class Foo
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @NG\Sequence(key="bar",init=1000,pattern="BAR{#|6}")
      * @var string
      */
     private $bar;
@@ -36,14 +35,12 @@ class Foo
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @NG\Sequence(key="baz",segment="id")
      * @var string
      */
     private $baz;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @NG\Sequence(key="foo",segment="{thud}")
      * @var string
      */
     private $foo;
@@ -75,9 +72,9 @@ class Foo
 
     /**
      * @param string $qux
-     * @return Foo
+     * @return Bar
      */
-    public function setQux(string $qux): Foo
+    public function setQux(string $qux): Bar
     {
         $this->qux = $qux;
         return $this;
@@ -93,9 +90,9 @@ class Foo
 
     /**
      * @param string $quux
-     * @return Foo
+     * @return Bar
      */
-    public function setQuux(string $quux): Foo
+    public function setQuux(string $quux): Bar
     {
         $this->quux = $quux;
         return $this;
@@ -113,9 +110,9 @@ class Foo
 
     /**
      * @param string $foo
-     * @return Foo
+     * @return Bar
      */
-    public function setFoo(string $foo): Foo
+    public function setFoo(string $foo): Bar
     {
         $this->foo = $foo;
         return $this;
@@ -131,9 +128,9 @@ class Foo
 
     /**
      * @param string $bar
-     * @return Foo
+     * @return Bar
      */
-    public function setBar(string $bar): Foo
+    public function setBar(string $bar): Bar
     {
         $this->bar = $bar;
         return $this;
@@ -149,9 +146,9 @@ class Foo
 
     /**
      * @param string $baz
-     * @return Foo
+     * @return Bar
      */
-    public function setBaz(string $baz): Foo
+    public function setBaz(string $baz): Bar
     {
         $this->baz = $baz;
         return $this;
