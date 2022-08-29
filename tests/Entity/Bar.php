@@ -121,7 +121,7 @@ class Bar
     /**
      * @return string
      */
-    public function getBar(): string
+    public function getBar(): ?string
     {
         return $this->bar;
     }

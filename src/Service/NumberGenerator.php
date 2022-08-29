@@ -2,6 +2,7 @@
 
 namespace Bytesystems\NumberGeneratorBundle\Service;
 
+use Bytesystems\NumberGeneratorBundle\Annotation\Segment;
 use Bytesystems\NumberGeneratorBundle\Annotation\Sequence;
 use Bytesystems\NumberGeneratorBundle\Entity\NumberSequence;
 use Bytesystems\NumberGeneratorBundle\Token\Token;
@@ -10,6 +11,7 @@ use Bytesystems\NumberGeneratorBundle\Token\TokenHandlerRegistry;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Bytesystems\NumberGeneratorBundle\Repository\NumberSequenceRepository;
+use Doctrine\ORM\NonUniqueResultException;
 
 class NumberGenerator
 {
@@ -38,19 +40,18 @@ class NumberGenerator
         $this->tokenHandlerRegistry = $tokenHandlerRegistry;
     }
 
-    public function getNextNumber(string $key, ?string $segment = null, ?string $pattern = null, ?int $initialValue = 0 ): string
+    public function getNextNumber(Sequence $annotation, ?string $selector = null, ?Segment $segment = null): string
     {
-        $sequence = $this->getSequence($key,$segment, $pattern);
+        $sequence = $this->getSequence($annotation, $selector, $segment);
 
         $pattern = $sequence->getPattern();
-        dump($pattern);
         $tokens = $this->tokenize($pattern,$sequence->getUpdatedAt());
 
         if($this->checkForReset($tokens))
         {
-            $sequence->setCurrentNumber($initialValue ?? 0);
+            $sequence->setCurrentNumber($annotation->init ?? 0);
         }
-        $nextNumber = $sequence->getNextNumber($initialValue ?? 0);
+        $nextNumber = $sequence->getNextNumber($annotation->init ?? 0);
         $this->repository->flush();
 
 
@@ -60,47 +61,36 @@ class NumberGenerator
 
 
     /**
-     * @param string $key
-     * @param string|null $segment
-     * @param string|null $pattern
-     *
      * @return NumberSequence
      */
-    protected function getSequence(string $key, string $segment = null, string $pattern = null): NumberSequence
+    protected function getSequence(Sequence $annotation, ?string $selector = null, ?Segment $segment = null): NumberSequence
     {
+        $defaultPattern = null === $annotation->pattern ? '{#}' : $annotation->pattern;
+        $defaultSequence = $this->repository->getSequence($annotation->key);
 
-        $sequences = $this->repository->getSequence($key, $segment);
-
-        $defaultSequence = array_filter($sequences, function($sequence) {
-                return $sequence->getSegment() === null;
-            })[0] ?? null;
-
-        $segmentSequence = array_filter($sequences, function($sequence) use ($segment) {
-                return $sequence->getSegment() === $segment;
-            })[0] ?? null;
-
-        if(null === $segment && null === $defaultSequence) {
+        if(null === $defaultSequence) {
             $sequence = new NumberSequence();
-            $sequence->setKey($key);
-            $sequence->setPattern($pattern == null ? '{#}' : $pattern);
+            $sequence->setKey($annotation->key);
+            $sequence->setPattern($defaultPattern);
             $this->repository->add($sequence,false);
             $defaultSequence = $sequence;
         }
 
-        if($segment) {
-            if(null === $segmentSequence && $pattern)
-            {
-                $sequence = new NumberSequence();
-                $sequence->setKey($key);
-                $sequence->setSegment($segment);
-                $sequence->setPattern($pattern == null ? '{#}' : $pattern);
-                $this->repository->add($sequence,false);
-                return $sequence;
-            }
 
-            if($segmentSequence) return $segmentSequence;
-        }
-        return $defaultSequence;
+        if(null === $selector) return $defaultSequence;
+
+        $segmentSequence = $this->repository->getSegmentedSequence($annotation->key,$selector);
+
+        if(null !== $segmentSequence) return $segmentSequence;
+        if(null === $segment) return $defaultSequence;
+
+        $sequence = new NumberSequence();
+        $sequence->setKey($annotation->key);
+        $sequence->setSegment($selector);
+        $sequence->setPattern($segment->pattern);
+        $this->repository->add($sequence,false);
+        return $sequence;
+
     }
 
     private function tokenize(string $pattern, DateTime $lastUpdate): array

@@ -4,6 +4,8 @@ namespace Bytesystems\NumberGeneratorBundle\Repository;
 
 use Bytesystems\NumberGeneratorBundle\Entity\NumberSequence;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class NumberSequenceRepository extends ServiceEntityRepository
@@ -25,9 +27,9 @@ class NumberSequenceRepository extends ServiceEntityRepository
     /**
      * @param $key
      * @param null $segment
-     * @return NumberSequence[] Returns an array of Number Sequence Objects
+     * @return NumberSequence Returns null or single Number Sequence
      */
-    public function getSequence($key, $segment = null): array
+    public function getSequence($key, $segment = null): ?NumberSequence
     {
         $qb = $this->createQueryBuilder('s');
 
@@ -35,17 +37,28 @@ class NumberSequenceRepository extends ServiceEntityRepository
             ->setParameter('key',$key);
 
 
-        $qb ->andWhere(
-            $qb->expr()->orX(
-                $qb->expr()->eq('s.segment',':segment'),
-                $qb->expr()->isNull('s.segment')
-                )
-            )
+        $qb ->andWhere($qb->expr()->isNull('s.segment'));
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param $key
+     * @param $segment
+     * @return NumberSequence Returns null or single Number Sequence
+     */
+    public function getSegmentedSequence($key, $segment): ?NumberSequence
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        $qb ->andWhere($qb->expr()->eq('s.key',':key'))
+            ->setParameter('key',$key);
+
+
+        $qb ->andWhere($qb->expr()->eq('s.segment',':segment'))
             ->setParameter('segment',$segment);
 
-
-        return $qb ->getQuery()
-                   ->getResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function flush()

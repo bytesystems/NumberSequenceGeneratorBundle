@@ -27,16 +27,11 @@
             <argument id="bytesystems_number_generator.service.property_helper" type="service"/>
         </service>
 
-        <service class="Bytesystems\NumberGeneratorBundle\Service\PatternResolver" id="bytesystems_number_generator.service.pattern_resolver">
-            <argument id="bytesystems_number_generator.service.property_helper" type="service"/>
-        </service>
-
         <service class="Bytesystems\NumberGeneratorBundle\EventListener\NumberGeneratorSubscriber" id="bytesystems_number_generator.event_listener.number_generator_subscriber" public="false">
             <argument id="bytesystems_number_generator.annotation.annotation_reader" type="service"/>
             <argument id="bytesystems_number_generator.service.number_generator" type="service"/>
             <argument id="bytesystems_number_generator.service.property_helper" type="service"/>
             <argument id="bytesystems_number_generator.service.segment_resolver" type="service"/>
-            <argument id="bytesystems_number_generator.service.pattern_resolver" type="service"/>
             <tag name="doctrine.event_subscriber"/>
         </service>
 

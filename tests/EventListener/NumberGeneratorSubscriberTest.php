@@ -61,6 +61,7 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
         $object = new Foo();
 
+
         $em = self::$kernel->getContainer()->get('doctrine')->getManager();
         $em->persist($object);
         $em->flush();
@@ -152,11 +153,14 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
         $em->persist($object);
         $em->flush();
 
+        $this->assertEquals('QUX000001',$object->getQux());
+
         $object = new Bar();
         $object->setQuux('foo');
         $em->persist($object);
         $em->flush();
 
+        $this->assertEquals('QUXFOO000001',$object->getQux());
     }
 
     public function testPersistResolvedSegmentNotConfigured()
@@ -173,12 +177,11 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
         $em->persist($bazSequence);
         $em->flush();
 
-
         $object = new Foo();
         $em->persist($object);
         $em->flush();
 
-        $sequence = $this->repository->findOneBy(['key' => 'foo']);
+        $sequence = $this->repository->findOneBy(['key' => 'foo','segment' => 'thudValue']);
         $this->assertInstanceOf(NumberSequence::class,$sequence);
         $this->assertEquals(150,$object->getFoo());
         $this->assertEquals(150,$sequence->getCurrentNumber());
@@ -191,8 +194,6 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
      */
     public function testPersistResolvedSegmentConfigured()
     {
-
-
         $this->databaseTool->loadFixtures();
 
         $object = new Foo();

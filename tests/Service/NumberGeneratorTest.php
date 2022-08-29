@@ -2,6 +2,7 @@
 
 namespace Bytesystems\NumberGeneratorBundle\Tests\Service;
 
+use Bytesystems\NumberGeneratorBundle\Annotation\Sequence;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -28,7 +29,11 @@ class NumberGeneratorTest extends KernelTestCase
 
         $numberGenerator = $this->getContainer()->get('bytesystems_number_generator.service.number_generator');
 
-        $generatedNumber = $numberGenerator->getNextNumber('Key', null, null, 1000);
+        $annotation = new Sequence();
+        $annotation->key = 'Key';
+        $annotation->init = 1000;
+
+        $generatedNumber = $numberGenerator->getNextNumber($annotation);
         $this->assertEquals(1001,$generatedNumber);
     }
 
@@ -36,10 +41,17 @@ class NumberGeneratorTest extends KernelTestCase
     {
         $this->databaseTool->loadFixtures();
         $numberGenerator = $this->getContainer()->get('bytesystems_number_generator.service.number_generator');
-        $generatedNumber = $numberGenerator->getNextNumber('Key', null, "IV-{Y}{m}-{#|4}-ID", 1000);
+        $annotation = new Sequence();
+        $annotation->key = 'Key';
+        $annotation->pattern = "IV-{Y}{m}-{#|4}-ID";
+        $annotation->init = 1000;
+        $generatedNumber = $numberGenerator->getNextNumber($annotation);
         $expected = sprintf("IV-%s-1001-ID",date('Ym'));
         $this->assertEquals($expected,$generatedNumber);
-        $generatedNumber = $numberGenerator->getNextNumber('Key2', null, "IV{y}-{#|6|y}", 1000);
+        $annotation->key = 'Key2';
+        $annotation->pattern = "IV{y}-{#|6|y}";
+        $annotation->init = 1000;
+        $generatedNumber = $numberGenerator->getNextNumber($annotation);
         $expected = sprintf("IV%s-001001",date('y'));
         $this->assertEquals($expected,$generatedNumber);
 

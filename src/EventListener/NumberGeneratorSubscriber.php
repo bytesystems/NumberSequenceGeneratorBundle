@@ -29,18 +29,13 @@ class NumberGeneratorSubscriber implements EventSubscriber
      * @var SegmentResolver
      */
     protected $segmentResolver;
-    /**
-     * @var PatternResolver
-     */
-    private $patternResolver;
 
-    public function __construct(AnnotationReader $annotationReader, NumberGenerator $generator, PropertyHelper $propertyHelper,SegmentResolver $segmentResolver, PatternResolver $patternResolver)
+    public function __construct(AnnotationReader $annotationReader, NumberGenerator $generator, PropertyHelper $propertyHelper,SegmentResolver $segmentResolver)
     {
         $this->annotationReader = $annotationReader;
         $this->generator = $generator;
         $this->propertyHelper = $propertyHelper;
         $this->segmentResolver = $segmentResolver;
-        $this->patternResolver = $patternResolver;
     }
 
     /**
@@ -63,10 +58,11 @@ class NumberGeneratorSubscriber implements EventSubscriber
         if(count($annotations) == 0) return;
 
         foreach ($annotations as $property => $annotation) {
-            $segment = $this->segmentResolver->resolveSegment($object,$annotation);
-            $pattern = $this->patternResolver->resolvePattern($object,$annotation,$segment);
+            $selector = $this->segmentResolver->resolveSegmentationValue($object,$annotation);
+            $segment = $this->segmentResolver->resolveSegment($annotation,$selector);
 
-            $nextNumber = $this->generator->getNextNumber($annotation->key, $segment, $pattern, $annotation->init);
+
+            $nextNumber = $this->generator->getNextNumber($annotation, $selector, $segment);
             $this->propertyHelper->setValue($object,$property,$nextNumber);
         }
     }

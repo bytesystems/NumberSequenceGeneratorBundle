@@ -13,7 +13,7 @@ class SegmentResolver
         $this->propertyHelper = $propertyHelper;
     }
 
-    public function resolveSegment($object, $annotation)
+    public function resolveSegmentationValue($object, $annotation)
     {
         $segment = $annotation->segment == null ? '' : $annotation->segment;
 
@@ -26,5 +26,17 @@ class SegmentResolver
         }
 
         return $segment;
+    }
+
+    public function resolveSegment($annotation,$value)
+    {
+        if($annotation->segments == null) return null;
+        $segments = $annotation->segments;
+
+        foreach ($segments as $segment) {
+            if($value == $segment->value) return $segment;
+        }
+
+        return null;
     }
 }
