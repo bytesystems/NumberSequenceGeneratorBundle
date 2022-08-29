@@ -53,6 +53,11 @@ The following tokens are available, date components follow PHP's datetime.format
   - H, hours, 24-hour format, 2 digits with leading zero
   - w, week of year, 2 digits with leading zero (*changed to lowercase for consistency*)
 
+#### *array segments*
+*optional*\
+Defines an array of segment annotations with "value" and "pattern" properties.
+It allows to define a pattern for a segment of a sequence.
+
 #### *int init*
 *optional, defaults to 0*\
 Defines the inital number for the sequence, the first generated number is initial number + 1.
@@ -68,6 +73,8 @@ But products from supplier Olymp should have their own article numbers like:\
 `ZEUS-41313-P`\
 The annotation achieving your goal would look like:\
 `Sequence(key="product",segment="{supplierId}",init=1000,pattern="ACME-{#|7}-P")`\
+
+This leaves it open to build an interface to mangage sequences and segments.
 
 The resulting entity:
 ```
@@ -94,7 +101,12 @@ class Product
 
   /**
    * @ORM\Column(type="string", nullable=true)
-   * @NG\Sequence(key="product",segment="{supplierId}",init=1000,pattern="ACME-{#|7}-P")
+   * @NG\Sequence(
+   * key="product",
+   * segment="{supplierId}",
+   * init=1000,
+   * pattern="ACME-{#|7}-P"
+   * )
    * @var string
    */
   private productNo;
@@ -105,11 +117,57 @@ class Product
 All products will have number like `ACME-5123141-P`\
 Assuming the supplierId of Olymp is 42, 
 enable the Olymp sequence using the following SQL statement:\
-`insert into bytesystems_number_sequence (sequence, segment, pattern, current_number, updated_at) values ('product','42', 'ZEUS-{#|5}-P',0,now());` 
+`insert into bytesystems_number_sequence (sequence, segment, pattern, current_number, updated_at) values ('product','42', 'ZEUS-{#|5}-P',0,now());`
+
+If you have more information about segmentation during development, you can extend the annotation.
+
+```
+/** 
+* @ORM\Table()
+* @ORM\Entity()
+*/
+class Document
+{
+  /**
+  * @ORM\Column(type="integer")
+  * @ORM\Id()
+  * @ORM\GeneratedValue(strategy="AUTO")
+  *
+  * @var integer
+  */
+  private $id;
+
+  /**
+   * @ORM\Column(type="string")
+   * @var string
+   */
+  private type; // 'OFFER','ORDER','DELIVERYNOTE'
+
+  /**
+   * @ORM\Column(type="string", nullable=true)
+   * @NG\Sequence(
+   * key="order",
+   * segment="{type}",
+   * init=1000,
+   * pattern="PO-{#|7}"
+   * segments={
+   *   @NG\Segment(value="OFFER",pattern="O-{#|7}"),
+   *   @NG\Segment(value="DELIVERYNOTE",pattern="DN-{#|7}"),
+   * }
+   * )
+   * @var string
+   */
+  private orderNo;
+  
+  ...
+}
+```
+
+The segmented sequence can still be modified via sql or an interface, but there's no need to create SQL-statements to crate the segments. 
 
 ## ToDo
 - include console command to generate a sequence
-- include option to auto enable segmented sequences
+- extend segmentation to target multiple properties
 
 ## License
 [The MIT License (MIT)](LICENSE)
