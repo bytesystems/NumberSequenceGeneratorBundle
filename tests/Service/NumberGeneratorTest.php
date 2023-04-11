@@ -2,7 +2,7 @@
 
 namespace Bytesystems\NumberGeneratorBundle\Tests\Service;
 
-use Bytesystems\NumberGeneratorBundle\Annotation\Sequence;
+use Bytesystems\NumberGeneratorBundle\Attribute\Sequence;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -10,8 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class NumberGeneratorTest extends KernelTestCase
 {
-    /** @var AbstractDatabaseTool */
-    protected $databaseTool;
+    private AbstractDatabaseTool $databaseTool;
 
     protected function setUp():void
     {
@@ -29,9 +28,9 @@ class NumberGeneratorTest extends KernelTestCase
 
         $numberGenerator = $this->getContainer()->get('bytesystems_number_generator.service.number_generator');
 
-        $annotation = new Sequence();
-        $annotation->key = 'Key';
-        $annotation->init = 1000;
+        $annotation = new Sequence(key: 'Key', init: 1000);
+//        $annotation->key = 'Key';
+//        $annotation->init = 1000;
 
         $generatedNumber = $numberGenerator->getNextNumber($annotation);
         $this->assertEquals(1001,$generatedNumber);
@@ -41,10 +40,10 @@ class NumberGeneratorTest extends KernelTestCase
     {
         $this->databaseTool->loadFixtures();
         $numberGenerator = $this->getContainer()->get('bytesystems_number_generator.service.number_generator');
-        $annotation = new Sequence();
-        $annotation->key = 'Key';
-        $annotation->pattern = "IV-{Y}{m}-{#|4}-ID";
-        $annotation->init = 1000;
+        $annotation = new Sequence(key: 'Key', pattern: "IV-{Y}{m}-{#|4}-ID", init: 1000);
+//        $annotation->key = 'Key';
+//        $annotation->pattern = "IV-{Y}{m}-{#|4}-ID";
+//        $annotation->init = 1000;
         $generatedNumber = $numberGenerator->getNextNumber($annotation);
         $expected = sprintf("IV-%s-1001-ID",date('Ym'));
         $this->assertEquals($expected,$generatedNumber);

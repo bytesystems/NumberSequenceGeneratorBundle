@@ -2,16 +2,14 @@
 
 namespace Bytesystems\NumberGeneratorBundle\Service;
 
-use Bytesystems\NumberGeneratorBundle\Annotation\Segment;
-use Bytesystems\NumberGeneratorBundle\Annotation\Sequence;
+use Bytesystems\NumberGeneratorBundle\Attribute\Segment;
+use Bytesystems\NumberGeneratorBundle\Attribute\Sequence;
 use Bytesystems\NumberGeneratorBundle\Entity\NumberSequence;
+use Bytesystems\NumberGeneratorBundle\Repository\NumberSequenceRepository;
 use Bytesystems\NumberGeneratorBundle\Token\Token;
-use Bytesystems\NumberGeneratorBundle\Token\TokenFactory;
 use Bytesystems\NumberGeneratorBundle\Token\TokenHandlerRegistry;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Bytesystems\NumberGeneratorBundle\Repository\NumberSequenceRepository;
-use Doctrine\ORM\NonUniqueResultException;
 
 class NumberGenerator
 {

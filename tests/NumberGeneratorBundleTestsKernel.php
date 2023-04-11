@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Kernel;
 class NumberGeneratorBundleTestsKernel extends Kernel
 {
 
-    public function registerBundles(): array
+    public function registerBundles(): iterable
     {
         $bundles = [
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),

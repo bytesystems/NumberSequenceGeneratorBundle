@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Bytesystems\NumberGeneratorBundle\Annotation;
+namespace Bytesystems\NumberGeneratorBundle\Service;
 use Doctrine\Common\Annotations\AnnotationReader as DoctrineAnnotationReader;
 use ReflectionClass;
 
@@ -34,6 +34,29 @@ class AnnotationReader extends DoctrineAnnotationReader
             $annotatedProperties = array_merge(
                 $annotatedProperties,
                 $this->getPropertiesWithAnnotation($parentClass, $annotationName)
+            );
+        }
+
+        return $annotatedProperties;
+    }
+
+    public function getPropertiesWithAttribute(ReflectionClass $class, string $attributeName): array
+    {
+        $annotatedProperties = [];
+
+        $properties = $class->getProperties();
+        foreach ($properties as $property) {
+            $attributes = $property->getAttributes($attributeName);
+            foreach ($attributes as $attribute) {
+                $annotatedProperties[$property->getName()] = $attribute->newInstance();
+            }
+        }
+
+        $parentClass = $class->getParentClass();
+        if ($parentClass instanceof ReflectionClass) {
+            $annotatedProperties = array_merge(
+                $annotatedProperties,
+                $this->getPropertiesWithAttribute($parentClass, $attributeName)
             );
         }
 

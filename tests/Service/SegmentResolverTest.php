@@ -2,8 +2,8 @@
 
 namespace Bytesystems\NumberGeneratorBundle\Tests\Service;
 
-use Bytesystems\NumberGeneratorBundle\Annotation\AnnotationReader;
-use Bytesystems\NumberGeneratorBundle\Annotation\Sequence;
+use Bytesystems\NumberGeneratorBundle\Attribute\Sequence;
+use Bytesystems\NumberGeneratorBundle\Service\AnnotationReader;
 use Bytesystems\NumberGeneratorBundle\Service\PropertyHelper;
 use Bytesystems\NumberGeneratorBundle\Service\SegmentResolver;
 use Bytesystems\NumberGeneratorBundle\Tests\Entity\Foo;
@@ -22,7 +22,7 @@ class SegmentResolverTest extends TestCase
 
         $foo = new Foo();
 
-        $annotations = $annotationReader->getPropertiesWithAnnotation(new \ReflectionClass(Foo::class),Sequence::class);
+        $annotations = $annotationReader->getPropertiesWithAttribute(new \ReflectionClass(Foo::class),Sequence::class);
         $annotation = $annotations['foo'];
         $segment = $segmentResolver->resolveSegmentationValue($foo,$annotation);
         $this->assertEquals("thudValue",$segment);
@@ -37,7 +37,7 @@ class SegmentResolverTest extends TestCase
 
         $foo = new Foo();
 
-        $annotations = $annotationReader->getPropertiesWithAnnotation(new \ReflectionClass(Foo::class),Sequence::class);
+        $annotations = $annotationReader->getPropertiesWithAttribute(new \ReflectionClass(Foo::class),Sequence::class);
         $annotation = $annotations['qux'];
         $selector = $segmentResolver->resolveSegmentationValue($foo,$annotation);
         $this->assertEquals("quuxValue",$selector);

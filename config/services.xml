@@ -7,7 +7,7 @@
     <services>
         <service class="Bytesystems\NumberGeneratorBundle\Entity\NumberSequence" id="bytesystems_number_generator.entity.number_sequence " public="true"/>
 
-        <service class="Bytesystems\NumberGeneratorBundle\Annotation\AnnotationReader" id="bytesystems_number_generator.annotation.annotation_reader" public="false" />
+        <service class="Bytesystems\NumberGeneratorBundle\Service\AnnotationReader" id="bytesystems_number_generator.service.annotation_reader" public="false" />
         <service class="Bytesystems\NumberGeneratorBundle\Repository\NumberSequenceRepository" id="bytesystems_number_generator.repository.number_sequence_repository" public="false">
             <argument id="doctrine" type="service"/>
             <argument type="string" >Bytesystems\NumberGeneratorBundle\Entity\NumberSequence</argument>
@@ -28,7 +28,7 @@
         </service>
 
         <service class="Bytesystems\NumberGeneratorBundle\EventListener\NumberGeneratorSubscriber" id="bytesystems_number_generator.event_listener.number_generator_subscriber" public="false">
-            <argument id="bytesystems_number_generator.annotation.annotation_reader" type="service"/>
+            <argument id="bytesystems_number_generator.service.annotation_reader" type="service"/>
             <argument id="bytesystems_number_generator.service.number_generator" type="service"/>
             <argument id="bytesystems_number_generator.service.property_helper" type="service"/>
             <argument id="bytesystems_number_generator.service.segment_resolver" type="service"/>

@@ -14,10 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class NumberGeneratorSubscriberTest extends KernelTestCase
 {
-    /** @var AbstractDatabaseTool */
-    protected $databaseTool;
-
     private $repository;
+    protected AbstractDatabaseTool $databaseTool;
 
     protected function setUp():void
     {
@@ -122,8 +120,6 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
         $em->persist($bazSequence);
         $em->flush();
-
-
 
         $object = new Foo();
         $em->persist($object);

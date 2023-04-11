@@ -2,9 +2,10 @@ framework:
   secret: secret
   test: ~
   session:
-    storage_id: session.storage.mock_file
+    storage_factory_id: session.storage.factory.mock_file
   profiler:
     collect: false
+  http_method_override: false
 doctrine:
   dbal:
 #    driver: pdo_sqlite
@@ -34,7 +35,7 @@ services:
       $entityClass: 'NumberSequence'
   Bytesystems\NumberGeneratorBundle\:
     resource: '../src/*'
-    exclude: '../src/{DependencyInjection,Entity,Token}'
+    exclude: '../src/{DependencyInjection,Entity,Token,Attribute}'
 
 
 

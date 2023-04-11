@@ -4,7 +4,6 @@
 namespace Bytesystems\NumberGeneratorBundle\Tests\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Bytesystems\NumberGeneratorBundle\Annotation as NG;
 
 /**
  * Class Foo
@@ -28,39 +27,40 @@ class Foo
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @NG\Sequence(key="bar",init=1000,pattern="BAR{#|6}")
      * @var string
      */
+    #[\Bytesystems\NumberGeneratorBundle\Attribute\Sequence(key: "bar", pattern: "BAR{#|6}", init: 1000)]
     private $bar;
 
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @NG\Sequence(key="baz",segment="id")
      * @var string
      */
+    #[\Bytesystems\NumberGeneratorBundle\Attribute\Sequence(key: "baz", segment: "id")]
     private $baz;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @NG\Sequence(key="foo",segment="{thud}")
      * @var string
      */
+    #[\Bytesystems\NumberGeneratorBundle\Attribute\Sequence(key: "foo", segment: "{thud}")]
     private $foo;
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @NG\Sequence(
-     *      key="qux",
-     *      segment="{quux}",
-     *      pattern="QUX{#|6}",
-     *      segments={
-     *          @NG\Segment(value="foo",pattern="QUXFOO{#|6}"),
-     *          @NG\Segment(value="bar",pattern="QUXBAR{#|6}"),
-     *          @NG\Segment(value="baz",pattern="QUXBAZ{#|6}")
-     *     })
      * @var string
      */
+    #[\Bytesystems\NumberGeneratorBundle\Attribute\Sequence(
+        key: "qux",
+        segment: "{quux}",
+        segments: [
+            new \Bytesystems\NumberGeneratorBundle\Attribute\Segment(value: "foo", pattern: "QUXFOO{#|6}"),
+            new \Bytesystems\NumberGeneratorBundle\Attribute\Segment(value: "bar", pattern: "QUXBAR{#|6}"),
+            new \Bytesystems\NumberGeneratorBundle\Attribute\Segment(value: "baz", pattern: "QUXBAZ{#|6}")
+        ],
+        pattern: "QUX{#|6}"
+    )]
     private $qux;
 
     private $quux = 'quuxValue';
@@ -156,4 +156,6 @@ class Foo
         $this->baz = $baz;
         return $this;
     }
+
+
 }

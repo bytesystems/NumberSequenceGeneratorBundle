@@ -4,7 +4,6 @@
 namespace Bytesystems\NumberGeneratorBundle\Tests\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Bytesystems\NumberGeneratorBundle\Annotation as NG;
 
 /**
  * Class Foo
@@ -47,17 +46,18 @@ class Bar
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @NG\Sequence(
-     *      key="qux",
-     *      segment="{quux}",
-     *      pattern="QUX{#|6}",
-     *      segments={
-     *          @NG\Segment(value="foo",pattern="QUXFOO{#|6}"),
-     *          @NG\Segment(value="bar",pattern="QUXBAR{#|6}"),
-     *          @NG\Segment(value="baz",pattern="QUXBAZ{#|6}")
-     *     })
      * @var string
      */
+    #[\Bytesystems\NumberGeneratorBundle\Attribute\Sequence(
+        key: "qux",
+        segment: "{quux}",
+        segments: [
+            new \Bytesystems\NumberGeneratorBundle\Attribute\Segment(value: "foo", pattern: "QUXFOO{#|6}"),
+            new \Bytesystems\NumberGeneratorBundle\Attribute\Segment(value: "bar", pattern: "QUXBAR{#|6}"),
+            new \Bytesystems\NumberGeneratorBundle\Attribute\Segment(value: "baz", pattern: "QUXBAZ{#|6}")
+        ],
+        pattern: "QUX{#|6}"
+    )]
     private $qux;
 
     private $quux = 'quuxValue';

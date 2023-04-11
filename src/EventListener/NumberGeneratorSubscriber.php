@@ -4,17 +4,15 @@
 namespace Bytesystems\NumberGeneratorBundle\EventListener;
 
 
-use Bytesystems\NumberGeneratorBundle\Annotation\AnnotationReader;
-use Bytesystems\NumberGeneratorBundle\Annotation\Sequence;
+use Bytesystems\NumberGeneratorBundle\Attribute\Sequence;
+use Bytesystems\NumberGeneratorBundle\Service\AnnotationReader;
 use Bytesystems\NumberGeneratorBundle\Service\NumberGenerator;
-use Bytesystems\NumberGeneratorBundle\Service\PatternResolver;
 use Bytesystems\NumberGeneratorBundle\Service\PropertyHelper;
 use Bytesystems\NumberGeneratorBundle\Service\SegmentResolver;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use ReflectionClass;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class NumberGeneratorSubscriber implements EventSubscriber
 {
@@ -53,7 +51,7 @@ class NumberGeneratorSubscriber implements EventSubscriber
         $object = $args->getObject();
 
         $reflectionClass = new ReflectionClass($object);
-        $annotations = $this->annotationReader->getPropertiesWithAnnotation($reflectionClass, Sequence::class);
+        $annotations = $this->annotationReader->getPropertiesWithAttribute($reflectionClass, Sequence::class);
 
         if(count($annotations) == 0) return;
 
