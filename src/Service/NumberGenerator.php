@@ -63,7 +63,7 @@ class NumberGenerator
      */
     protected function getSequence(Sequence $annotation, ?string $selector = null, ?Segment $segment = null): NumberSequence
     {
-        $defaultPattern = null === $annotation->pattern ? '{#}' : $annotation->pattern;
+        $defaultPattern = $annotation->pattern ?? '{#}';
         $defaultSequence = $this->repository->getSequence($annotation->key);
 
         if(null === $defaultSequence) {

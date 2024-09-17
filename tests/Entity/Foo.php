@@ -8,47 +8,45 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class Foo
  * @package Bytesystems\NumberGeneratorBundle\Tests\Entity
- *
- * @ORM\Table()
- * @ORM\Entity()
  */
+#[ORM\Entity]
+#[ORM\Table]
 class Foo
 {
     private $thud = "thudValue";
 
     /**
-     * @ORM\Column(type="integer")
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @var integer
      */
+    #[ORM\Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string
      */
     #[\Bytesystems\NumberGeneratorBundle\Attribute\Sequence(key: "bar", pattern: "BAR{#|6}", init: 1000)]
+    #[ORM\Column(type: 'string', nullable: true)]
     private $bar;
 
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string
      */
     #[\Bytesystems\NumberGeneratorBundle\Attribute\Sequence(key: "baz", segment: "id")]
+    #[ORM\Column(type: 'string', nullable: true)]
     private $baz;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string
      */
     #[\Bytesystems\NumberGeneratorBundle\Attribute\Sequence(key: "foo", segment: "{thud}")]
+    #[ORM\Column(type: 'string', nullable: true)]
     private $foo;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string
      */
     #[\Bytesystems\NumberGeneratorBundle\Attribute\Sequence(
@@ -61,22 +59,16 @@ class Foo
         ],
         pattern: "QUX{#|6}"
     )]
+    #[ORM\Column(type: 'string', nullable: true)]
     private $qux;
 
     private $quux = 'quuxValue';
 
-    /**
-     * @return string
-     */
-    public function getQux(): string
+    public function getQux(): ?string
     {
         return $this->qux;
     }
 
-    /**
-     * @param string $qux
-     * @return Foo
-     */
     public function setQux(string $qux): Foo
     {
         $this->qux = $qux;
@@ -102,55 +94,32 @@ class Foo
     }
 
 
-
-    /**
-     * @return string
-     */
     public function getFoo(): string
     {
         return $this->foo;
     }
 
-    /**
-     * @param string $foo
-     * @return Foo
-     */
     public function setFoo(string $foo): Foo
     {
         $this->foo = $foo;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getBar(): string
     {
         return $this->bar;
     }
-
-    /**
-     * @param string $bar
-     * @return Foo
-     */
     public function setBar(string $bar): Foo
     {
         $this->bar = $bar;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getBaz(): string
     {
         return $this->baz;
     }
 
-    /**
-     * @param string $baz
-     * @return Foo
-     */
     public function setBaz(string $baz): Foo
     {
         $this->baz = $baz;

@@ -14,21 +14,15 @@ class Token
      * @var array
      */
     protected $parameters;
-    /**
-     * @var string
-     */
-    protected $replace;
-    /**
-     * @var \DateTime
-     */
-    protected $resetContext;
 
-    public function __construct($tokenInfo, $replace, $resetContext)
+    /**
+     * @param string $replace
+     * @param \DateTime $resetContext
+     */
+    public function __construct($tokenInfo, protected $replace, protected $resetContext)
     {
         $this->identifier = array_shift($tokenInfo);
         $this->parameters = $tokenInfo;
-        $this->replace = $replace;
-        $this->resetContext = $resetContext;
 
     }
 

@@ -14,7 +14,6 @@ class NumberGeneratorTest extends KernelTestCase
 
     protected function setUp():void
     {
-        parent::setUp();
         $this->bootKernel();
         $application = new Application(self::$kernel);
         $application->setAutoExit(false);

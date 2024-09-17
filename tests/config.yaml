@@ -8,20 +8,19 @@ framework:
   http_method_override: false
 doctrine:
   dbal:
-#    driver: pdo_sqlite
-#    url: 'sqlite:///%kernel.project_dir%/var/test.sqlite'
     driver: pdo_sqlite
     path: "%kernel.project_dir%/test.sqlite"
   orm:
+    enable_lazy_ghost_objects: true
     entity_managers:
       default:
         mappings:
           NumberGeneratorBundle:
-            type: annotation
+            type: attribute
             dir: src/Entity
             prefix: Bytesystems\NumberGeneratorBundle
           NumberGeneratorBundleTest:
-            type: annotation
+            type: attribute
             dir: tests/Entity
             prefix: Bytesystems\NumberGeneratorBundle\Tests
 liip_test_fixtures:

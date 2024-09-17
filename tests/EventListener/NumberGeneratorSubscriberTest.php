@@ -19,7 +19,6 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
 
     protected function setUp():void
     {
-        parent::setUp();
         $this->bootKernel();
         $application = new Application(self::$kernel);
         $application->setAutoExit(false);
@@ -42,6 +41,8 @@ class NumberGeneratorSubscriberTest extends KernelTestCase
         $em = self::$kernel->getContainer()->get('doctrine')->getManager();
         $em->persist($object);
         $em->flush();
+
+
 
         $results = $em->getRepository(Foo::class)->findAll();
         $this->assertCount(1,$results);

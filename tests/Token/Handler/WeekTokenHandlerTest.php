@@ -16,8 +16,6 @@ class WeekTokenHandlerTest extends TestCase
 
     protected function setUp():void
     {
-        parent::setUp();
-
         $this->handler = new WeekTokenHandler();
         $this->weekToken = new Token(['w'],'{w}',new \DateTime());
         $this->dateTimeToken = new Token(['y'],'{y}',new \DateTime());

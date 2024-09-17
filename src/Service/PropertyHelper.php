@@ -37,15 +37,15 @@ class PropertyHelper
     {
         try {
             $value = $this->propertyAccessor->getValue($object, $property);
-        } catch (Exception $exception) {
+        } catch (Exception) {
             try {
                 $reflection = new ReflectionProperty($object,$property);
                 $reflection->setAccessible(true);
                 $value = $reflection->getValue($object);
 
-            } catch (Exception $exception) {
+            } catch (Exception) {
                 throw new InvalidArgumentException(
-                    sprintf('Can\'t read property "%s" on class "%s". The property does not exist.',$property,get_class($object))
+                    sprintf('Can\'t read property "%s" on class "%s". The property does not exist.',$property,$object::class)
                 );
             }
         }
@@ -64,18 +64,18 @@ class PropertyHelper
      *
      * @throws InvalidArgumentException if the property does not exist
      */
-    public function setValue(object $object, string $property, $value): void
+    public function setValue(object $object, string $property, mixed $value): void
     {
         try {
             $this->propertyAccessor->setValue($object,$property,$value);
-        } catch (Exception $e) {
+        } catch (Exception) {
             try {
                 $reflection = new ReflectionProperty($object,$property);
                 $reflection->setAccessible(true);
                 $reflection->setValue($object,$value);
-            } catch (Exception $exception) {
+            } catch (Exception) {
                 throw new InvalidArgumentException(
-                    sprintf('Can\'t write property "%s" on class "%s". The property does not exist.',$property,get_class($object))
+                    sprintf('Can\'t write property "%s" on class "%s". The property does not exist.',$property,$object::class)
                 );
             }
         }

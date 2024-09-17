@@ -8,44 +8,42 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class Foo
  * @package Bytesystems\NumberGeneratorBundle\Tests\Entity
- *
- * @ORM\Table()
- * @ORM\Entity()
  */
+#[ORM\Entity]
+#[ORM\Table]
 class Bar
 {
     private $thud = "thudValue";
 
     /**
-     * @ORM\Column(type="integer")
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @var integer
      */
+    #[ORM\Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string
      */
+    #[ORM\Column(type: 'string', nullable: true)]
     private $bar;
 
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string
      */
+    #[ORM\Column(type: 'string', nullable: true)]
     private $baz;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string
      */
+    #[ORM\Column(type: 'string', nullable: true)]
     private $foo;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string
      */
     #[\Bytesystems\NumberGeneratorBundle\Attribute\Sequence(
@@ -58,6 +56,7 @@ class Bar
         ],
         pattern: "QUX{#|6}"
     )]
+    #[ORM\Column(type: 'string', nullable: true)]
     private $qux;
 
     private $quux = 'quuxValue';
@@ -121,7 +120,7 @@ class Bar
     /**
      * @return string
      */
-    public function getBar(): ?string
+    public function getBar(): string
     {
         return $this->bar;
     }

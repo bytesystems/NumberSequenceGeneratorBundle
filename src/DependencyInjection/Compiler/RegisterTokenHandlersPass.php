@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class RegisterTokenHandlersPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $registry = $container->getDefinition('bytesystems_number_generator.token.token_handler_registry');
 

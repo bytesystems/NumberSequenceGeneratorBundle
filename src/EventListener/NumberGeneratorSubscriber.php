@@ -9,12 +9,15 @@ use Bytesystems\NumberGeneratorBundle\Service\AnnotationReader;
 use Bytesystems\NumberGeneratorBundle\Service\NumberGenerator;
 use Bytesystems\NumberGeneratorBundle\Service\PropertyHelper;
 use Bytesystems\NumberGeneratorBundle\Service\SegmentResolver;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use ReflectionClass;
 
-class NumberGeneratorSubscriber implements EventSubscriber
+#[AsDoctrineListener(event: Events::prePersist)]
+class NumberGeneratorSubscriber
 {
 
     protected $annotationReader;
@@ -35,18 +38,7 @@ class NumberGeneratorSubscriber implements EventSubscriber
         $this->propertyHelper = $propertyHelper;
         $this->segmentResolver = $segmentResolver;
     }
-
-    /**
-     * @return array
-     */
-    public function getSubscribedEvents()
-    {
-        return [
-            Events::prePersist
-        ];
-    }
-
-    public function prePersist(LifecycleEventArgs $args)
+    public function prePersist(PrePersistEventArgs $args): void
     {
         $object = $args->getObject();
 

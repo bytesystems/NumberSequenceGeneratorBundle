@@ -13,52 +13,47 @@ use Bytesystems\NumberGeneratorBundle\Repository\NumberSequenceRepository;
 /**
  * Class NumberSequence
  * @package Bytesystems\NumberGeneratorBundle\Entity
- *
- * @ORM\Entity(repositoryClass=NumberSequenceRepository::class)
- * @ORM\Table(name="bytesystems_number_sequence",
- *    uniqueConstraints={
- *        @UniqueConstraint(name="sequence_unique",
- *            columns={"sequence", "segment"})
- *    }
- * )
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Entity(repositoryClass: NumberSequenceRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'bytesystems_number_sequence')]
+#[UniqueConstraint(name: 'sequence_unique', columns: ['sequence', 'segment'])]
 class NumberSequence
 {
     const DEFAULT_INIT = 0;
 
     /**
      * @var integer|null
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,name="sequence")
      */
+    #[ORM\Column(type: 'string', length: 255, name: 'sequence')]
     protected $key;
 
     /**
      * @var string|null
-     * @ORM\Column(type="string",length=255,nullable=true)
      */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected $segment;
 
 
     /**
      * @var string|null
-     * @ORM\Column(type="string",length=60,nullable=true)
      */
+    #[ORM\Column(type: 'string', length: 60, nullable: true)]
     protected $pattern ='{#}';
 
     /**
      * @var int
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Column(type: 'integer')]
     protected $currentNumber = self::DEFAULT_INIT;
 
     /**
@@ -91,8 +86,8 @@ class NumberSequence
 
     /**
      * @var DateTime
-     * @ORM\Column(type="datetime")
      */
+    #[ORM\Column(type: 'datetime')]
     protected $updatedAt;
 
     public function __clone()
@@ -182,10 +177,8 @@ class NumberSequence
         return $this;
     }
 
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
     public function beforeSaving() {
         $this->updatedAt = new \DateTime('now');
     }

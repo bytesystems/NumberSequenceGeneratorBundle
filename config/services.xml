@@ -5,7 +5,7 @@
         https://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service class="Bytesystems\NumberGeneratorBundle\Entity\NumberSequence" id="bytesystems_number_generator.entity.number_sequence " public="true"/>
+        <service class="Bytesystems\NumberGeneratorBundle\Entity\NumberSequence" id="bytesystems_number_generator.entity.number_sequence" public="true"/>
 
         <service class="Bytesystems\NumberGeneratorBundle\Service\AnnotationReader" id="bytesystems_number_generator.service.annotation_reader" public="false" />
         <service class="Bytesystems\NumberGeneratorBundle\Repository\NumberSequenceRepository" id="bytesystems_number_generator.repository.number_sequence_repository" public="false">
@@ -32,7 +32,7 @@
             <argument id="bytesystems_number_generator.service.number_generator" type="service"/>
             <argument id="bytesystems_number_generator.service.property_helper" type="service"/>
             <argument id="bytesystems_number_generator.service.segment_resolver" type="service"/>
-            <tag name="doctrine.event_subscriber"/>
+            <tag name="doctrine.event_listener" event="prePersist"/>
         </service>
 
         <service class="Bytesystems\NumberGeneratorBundle\Token\TokenHandlerRegistry" id="bytesystems_number_generator.token.token_handler_registry"/>

@@ -42,7 +42,7 @@ class SequenceTokenHandler implements TokenHandlerInterface
         $reset = $params[1] ?? null;
         if(null != $reset)
         {
-            $reset = strtolower($reset);
+            $reset = strtolower((string) $reset);
             if(!in_array($reset,$this->allowResetOn)) {
                 throw new \InvalidArgumentException(sprintf("Can't reset on period '%s'", $reset));
             }

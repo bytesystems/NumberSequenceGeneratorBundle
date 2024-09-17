@@ -14,8 +14,6 @@ class SequenceTokenHandlerTest extends TestCase
 
     protected function setUp():void
     {
-        parent::setUp();
-
         $this->handler = new SequenceTokenHandler();
         $this->dateTimeToken = new Token(['y'],'{y}',new \DateTime());
         $this->sequenceToken = new Token(['#',6],'{#|6}',new \DateTime());
